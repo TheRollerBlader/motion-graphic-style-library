@@ -1,0 +1,76 @@
+"""Paper cut. Layered sheets slide into a stack you could pick up."""
+
+from motionstyle_core import clip, font, make_style
+
+STYLE = make_style(
+    id="papercut",
+    name="Paper Cut",
+    tagline="Colored sheets slide into a stack. The diagram has thickness.",
+    best_for=("stories", "consumer brands", "process steps", "gentle explainers"),
+    aliases=("paper cut", "paper craft", "layered paper", "construction paper", "cut paper"),
+    palette=dict(
+        background="#E7D7C3",
+        background_raised="#F3E6D4",
+        surface="#FFF8F0",
+        ink="#2A2118",
+        text="#2A2118",
+        text_dim="#7A6556",
+        primary="#E25B45",
+        primary_light="#F08A76",
+        primary_dark="#B93E2C",
+        secondary="#2F6F6A",
+        accent="#F0C14A",
+        danger="#C44536",
+        ok="#2F6F6A",
+        info="#3E6BA8",
+    ),
+    spots=(("sheet", "#F6E4D4"), ("sheet_pink", "#F6D6D0")),
+    display=font("Iowan Old Style, Palatino, Georgia, serif", 700, -0.01, "none", 1.0),
+    body=font("Helvetica Neue, Helvetica, Arial, sans-serif", 500, 0.0, "none", 1.4),
+    mono=font("SF Mono, ui-monospace, Menlo, Consolas, monospace", 600, 0.04, "upper", 1.2),
+    shape=dict(
+        radius_px=18,
+        border_px=0,
+        border_color="#2A2118",
+        shadow="0 16px 24px rgba(80, 50, 30, 0.18)",
+        blur_px=0,
+        notes="Each sheet is a flat color with a soft, long shadow. Shadows fall down and slightly right. Do not add a hard comic outline.",
+    ),
+    motion_character="Sheets travel a short distance into the stack, back layer first. The top sheet arrives last. Motion eases out. The stack then breathes one or two pixels.",
+    clips=(
+        clip("sheet_x", 0.55, "ease-out", "x", ((0, -36), (1, 0)), "Alternate the sign per layer so they do not all enter from the same side."),
+        clip("sheet_y", 0.55, "ease-out", "y", ((0, 24), (1, 0)), "A small drop as the sheet lands. Combine with sheet_x."),
+        clip("idle_float", 3.8, "ease-in-out", "y", ((0, 0), (0.5, -3), (1, 0)), "Only the top sheet. Lower sheets stay, or the stack looks nervous."),
+    ),
+    stagger_s=0.1,
+    idle="The top sheet lifts three pixels and settles. Shadows stay under the sheets.",
+    chrome=(
+        "The desk is the background. No horizon, no room, no device.",
+        "Three to five sheets is a scene. More than that is clutter.",
+        "Type sits on the top sheet in ink. Display is serif. Labels can be the sans body face.",
+        "Cut edges are simple: rounded rectangles, circles, and one custom silhouette if the noun needs it.",
+    ),
+    primitives=(
+        "Desk: the background color, nothing else.",
+        "Sheet: a solid palette fill, 18px radius, soft shadow, entered with sheet_x and sheet_y.",
+        "TopType: serif title on the front sheet.",
+        "Tab: a small sheet peeking out, used as a step label.",
+    ),
+    caption="On the desk, below the stack, ink type. No extra sheet unless the caption is the point of the beat. Current word is primary.",
+    dos=(
+        "Send the back sheet in first so the stack builds toward the camera.",
+        "Give each step its own sheet color from the palette.",
+        "Keep silhouettes bold enough to read without an outline.",
+    ),
+    donts=(
+        "Do not use black comic strokes, neon glow, or glass blur.",
+        "Do not slide a sheet across the whole frame. The travel is short.",
+        "Do not put a paragraph on a sheet. One title and one line.",
+        "Do not cast a shadow upward.",
+    ),
+    agent_rules=(
+        "Layer order is the explanation. Back sheet first, top sheet last.",
+        "Every sheet is a flat color from the palette. No photos as paper texture.",
+        "The shadow is soft and downward. A hard offset shadow belongs to a different style.",
+    ),
+)

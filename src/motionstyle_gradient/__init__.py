@@ -1,0 +1,76 @@
+"""Liquid gradient. Slow color fields, one line of white type."""
+
+from motionstyle_core import clip, font, make_style
+
+STYLE = make_style(
+    id="gradient",
+    name="Liquid Gradient",
+    tagline="Color fields drift. One line of type is enough.",
+    best_for=("brand films", "premium product", "wellness", "launch titles"),
+    aliases=("gradient", "mesh gradient", "liquid", "blob", "aurora", "brand film"),
+    palette=dict(
+        background="#1A1030",
+        background_raised="#2A1848",
+        surface="#FFFFFF",
+        ink="#FFFFFF",
+        text="#FFFFFF",
+        text_dim="#F3E9FF",
+        primary="#FFFFFF",
+        primary_light="#FFFFFF",
+        primary_dark="#E4D8FF",
+        secondary="#6D5BFF",
+        accent="#FFB199",
+        danger="#FF6B8A",
+        ok="#9EF0D0",
+        info="#69D2FF",
+    ),
+    spots=(("violet", "#6D5BFF"), ("peach", "#FFB199"), ("blue", "#69D2FF"), ("magenta", "#FF6BCB")),
+    display=font("Helvetica Neue, Helvetica, Arial, sans-serif", 500, -0.03, "none", 1.0),
+    body=font("Helvetica Neue, Helvetica, Arial, sans-serif", 400, 0.01, "none", 1.45),
+    mono=font("SF Mono, ui-monospace, Menlo, Consolas, monospace", 500, 0.08, "upper", 1.2),
+    shape=dict(
+        radius_px=32,
+        border_px=0,
+        border_color="#FFFFFF",
+        shadow="none",
+        blur_px=40,
+        notes="Blobs are large ellipses in the spot colors at about 80% opacity, blurred so edges disappear. Type sits in white with no card. A frost panel is allowed only when body copy would otherwise fail contrast.",
+    ),
+    motion_character="Ambient and slow. Blobs drift on long loops. Type rises a few pixels and fades. Nothing snaps, slams, or draws on.",
+    clips=(
+        clip("fade_up", 0.8, "ease-out", "y", ((0, 12), (1, 0)), "Pair with an opacity move from 0 to 1 over the same duration. The distance stays short."),
+        clip("blob_drift", 8.0, "linear", "x", ((0, -24), (0.5, 24), (1, -24)), "Loop. Each blob gets its own phase so they do not travel as a group."),
+        clip("idle_drift", 8.0, "linear", "y", ((0, 0), (0.5, 18), (1, 0)), "Vertical companion to blob_drift. Same duration, offset phase."),
+    ),
+    stagger_s=0.12,
+    idle="The field never holds still. Type, once in, holds.",
+    chrome=(
+        "Three or four blobs cover the frame. The background color only shows in the gaps.",
+        "One display line. A second line, if needed, is small and text_dim.",
+        "No icons, no cards, no progress bars, unless the sentence is a single number.",
+        "If a number is the idea, set it in the display face, white, and let the field move behind it.",
+    ),
+    primitives=(
+        "Field: background plus three blurred spot-color blobs on blob_drift and idle_drift.",
+        "QuietTitle: white display line, fade_up, often centered.",
+        "Whisper: a smaller text_dim line under the title, delayed by stagger_s.",
+        "Frost: optional 32px-radius panel at 12% white, blur 24, only for a sentence that cannot sit on the color.",
+    ),
+    caption="Avoid a caption bar. Burn the current phrase as the QuietTitle, or set a whisper line. If a full sentence must sit on screen, use Frost so the type stays white and readable.",
+    dos=(
+        "Keep type to a handful of words.",
+        "Move the field even when the type is holding.",
+        "Pick blob colors from the spots. Do not add a new hue.",
+    ),
+    donts=(
+        "Do not use hard shadows, thick borders, or sharp-edged shapes.",
+        "Do not slam, bounce, or wipe.",
+        "Do not put a dashboard, a chart, or a paragraph on this field.",
+        "Do not stop the blobs to make the type easier. Fix contrast with Frost instead.",
+    ),
+    agent_rules=(
+        "One line of type is the layout. A card grid means the wrong style.",
+        "Blob motion is an 8 second loop with staggered phases, not a one-shot entrance.",
+        "White type only. Colored type disappears into the field.",
+    ),
+)

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Motion style studies</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:#101014; color:#f4f1ea; font-family: Helvetica, Arial, sans-serif; }
+    header { padding: 56px 6vw 8px; max-width: 1100px; }
+    h1 { font-weight: 560; letter-spacing: -0.03em; font-size: clamp(32px, 5vw, 56px); margin: 0 0 8px; }
+    header p { max-width: 62ch; color: #c8c2b6; line-height: 1.5; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 22px; padding: 28px 6vw 72px; }
+    .card h2 { margin: 10px 0 0; font-size: 16px; font-weight: 650; }
+    .card p { margin: 4px 0; color: #b7b1a6; font-size: 14px; }
+    code { color: #8d887e; font-size: 12px; }
+    .stage { position:relative; aspect-ratio: 16/9; overflow:hidden; border-radius: 12px; }
+    .stage b, .stage small, .stage em { font-weight: 800; }
+    
+@keyframes wipe { 0%,100% { transform: scaleX(0); } 45%,70% { transform: scaleX(1); } }
+@keyframes slam { 0%,100% { transform: scale(1.22); } 55%,75% { transform: scale(1); } }
+@keyframes float { 0%,100% { transform: translateY(16px); opacity:.2; } 40%,70% { transform: translateY(0); opacity:1; } }
+@keyframes drift { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(16px,-12px,0); } }
+@keyframes pop { 0%,100% { transform: scale(.86); } 50%,70% { transform: scale(1); } }
+@keyframes draw { 0%,100% { stroke-dashoffset: 740; } 55%,80% { stroke-dashoffset: 0; } }
+@keyframes drop { 0%,100% { transform: rotate(45deg) skew(-12deg,-12deg) translateY(-28px); opacity:0; } 45%,75% { transform: rotate(45deg) skew(-12deg,-12deg) translateY(0); opacity:1; } }
+@keyframes grow { 0%,100% { transform: scaleY(0); } 40%,80% { transform: scaleY(1); } }
+@keyframes sheet { 0%,100% { transform: translate(-28px, 16px); } 45%,75% { transform: translate(0,0); } }
+@keyframes flicker { 0%,100% { opacity:0; } 12%,18% { opacity:1; } 24% { opacity:.2; } 36%,80% { opacity:1; } }
+@keyframes ken { 0% { transform: scale(1); } 100% { transform: scale(1.08); } }
+@keyframes rise { 0%,100% { transform: translateY(14px); opacity:0; } 30%,80% { transform: translateY(0); opacity:1; } }
+@keyframes hop { 0%,100% { transform: translateY(10px) scale(.7,1.05); } 45%,70% { transform: translateY(0) scale(1,1); } }
+@keyframes fade { 0%,100% { opacity:0; transform: translateY(8px); } 35%,75% { opacity:1; transform: translateY(0); } }
+
+
+        .s-swiss { background: #F3F0E8; color: #111111; }
+        .s-swiss .red { position:absolute; inset:0 auto 0 0; width:34%; background:#E10600; transform-origin:left; animation: wipe 2.8s cubic-bezier(.77,0,.18,1) infinite; }
+        .s-swiss .index { position:absolute; left:6%; top:12%; color:#F3F0E8; font-size:12px; letter-spacing:.14em; z-index:1; }
+        .s-swiss b { position:absolute; left:42%; top:36%; font-size:34px; letter-spacing:.04em; white-space:nowrap; }
+        .s-swiss .rule { position:absolute; left:48%; top:68%; width:18%; height:2px; background:#111111; transform-origin:left; animation: wipe 2.8s linear infinite; }
+        
+
+        .s-kinetic { background:#090909; color:#F4F4F0; }
+        .s-kinetic small { position:absolute; top:16%; left:0; right:0; text-align:center; letter-spacing:.4em; color:#9A9A92; font-size:12px; }
+        .s-kinetic b { position:absolute; inset:0; display:grid; place-items:center; font-size:64px; animation: slam 1.6s cubic-bezier(.34,1.56,.64,1) infinite; }
+        .s-kinetic .bar { position:absolute; left:28%; right:28%; bottom:22%; height:8px; background:#F5E642; transform-origin:left; animation: wipe 1.6s ease-out infinite; }
+        
+
+        .s-glass { background:#0C1024; }
+        .s-glass .a, .s-glass .b, .s-glass .c { position:absolute; border-radius:50%; filter:blur(8px); }
+        .s-glass .a { width:55%; height:70%; left:-8%; top:-20%; background:#7C6CFF; animation: drift 6s ease-in-out infinite; }
+        .s-glass .b { width:48%; height:60%; right:-6%; bottom:-10%; background:#F2B8FF; animation: drift 7s ease-in-out infinite reverse; }
+        .s-glass .c { width:36%; height:46%; left:30%; bottom:-8%; background:#A7B4FF; animation: drift 5.5s ease-in-out infinite; }
+        .s-glass .card { position:absolute; left:16%; right:16%; top:22%; bottom:22%; border-radius:18px; border:1px solid rgba(255,255,255,.35); background:rgba(244,247,255,.16); backdrop-filter:blur(10px); display:grid; place-items:center; align-content:center; color:#F7F8FF; animation: float 3.2s ease-in-out infinite; }
+        .s-glass b { font-size:28px; font-weight:560; }
+        .s-glass small { letter-spacing:.18em; color:#B7C0DC; font-size:10px; }
+        
+
+        .s-brutalist { background:#1A1A2E; }
+        .s-brutalist .card { position:absolute; left:14%; right:14%; top:22%; bottom:22%; background:#F7F4F0; color:#0B0B12; border:4px solid #0B0B12; border-radius:18px; box-shadow:8px 8px 0 #0B0B12; display:flex; flex-direction:column; justify-content:space-between; padding:8% 8%; animation: pop 1.8s cubic-bezier(.34,1.56,.64,1) infinite; }
+        .s-brutalist b { font-size:32px; letter-spacing:.04em; }
+        .s-brutalist em { align-self:flex-start; font-style:normal; font-size:12px; letter-spacing:.12em; background:#CC785C; border:3px solid #0B0B12; border-radius:999px; padding:6px 12px; box-shadow:4px 4px 0 #0B0B12; }
+        
+
+        .s-chalk { background:#123127; color:#F3EFE2; }
+        .s-chalk svg { position:absolute; inset:0; width:100%; height:100%; }
+        .s-chalk .draw { stroke-dasharray: 300; stroke-dashoffset:300; animation: draw 2.8s ease-in-out infinite; }
+        .s-chalk b { position:absolute; left:46%; top:28%; font-family:"Chalkduster","Bradley Hand",cursive; font-size:32px; font-weight:400; animation: fade 2.8s ease-out infinite; }
+        
+
+        .s-isometric { background:#E6E1D8; }
+        .s-isometric .cube { position:absolute; width:42px; height:42px; transform:rotate(45deg) skew(-12deg,-12deg); }
+        .s-isometric .c1 { left:28%; top:42%; background:#E07A5F; animation: drop 2.4s ease-out infinite; }
+        .s-isometric .c2 { left:46%; top:30%; background:#81B29A; animation: drop 2.4s ease-out .15s infinite; }
+        .s-isometric .c3 { left:40%; top:52%; background:#F2CC8F; animation: drop 2.4s ease-out .3s infinite; }
+        .s-isometric small { position:absolute; left:8%; top:12%; background:#F4EFE6; color:#2B2A28; border-radius:10px; padding:4px 10px; font-size:12px; }
+        
+
+        .s-signal { background:#070B16; color:#E8F1FF; }
+        .s-signal .num { position:absolute; left:8%; top:10%; font-size:28px; font-variant-numeric:tabular-nums; }
+        .s-signal .bars { position:absolute; left:8%; bottom:18%; display:flex; align-items:flex-end; gap:8px; height:46%; }
+        .s-signal .bars span { width:16px; background:#7AA2FF; transform-origin:bottom; animation: grow 2s ease-out infinite; }
+        .s-signal .bars span:nth-child(1){ height:46%; }
+        .s-signal .bars span:nth-child(2){ height:70%; animation-delay:.08s; }
+        .s-signal .bars span:nth-child(3){ height:58%; background:#3EE0FF; animation-delay:.16s; }
+        .s-signal .bars span:nth-child(4){ height:90%; background:#FFB020; animation-delay:.24s; }
+        .s-signal .line { position:absolute; right:6%; bottom:16%; width:42%; }
+        .s-signal .draw { stroke-dasharray:180; stroke-dashoffset:180; animation: draw 2.2s ease-in-out infinite; }
+        
+
+        .s-papercut { background:#E7D7C3; }
+        .s-papercut i { position:absolute; border-radius:16px; box-shadow:0 12px 18px rgba(80,50,30,.18); }
+        .s-papercut .s1 { left:14%; right:18%; top:30%; bottom:16%; background:#2F6F6A; animation: sheet 2.6s ease-out infinite; }
+        .s-papercut .s2 { left:20%; right:14%; top:22%; bottom:20%; background:#F6D6D0; animation: sheet 2.6s ease-out .12s infinite; }
+        .s-papercut .s3 { left:24%; right:20%; top:14%; bottom:26%; background:#FFF8F0; color:#2A2118; display:grid; place-items:center; animation: sheet 2.6s ease-out .24s infinite; }
+        .s-papercut .tab { left:16%; top:20%; width:16%; height:14%; background:#E25B45; animation: sheet 2.6s ease-out .08s infinite; }
+        .s-papercut b { font-family:Georgia,serif; font-size:32px; }
+        
+
+        .s-neon { background:#07060F; }
+        .s-neon .floor { position:absolute; left:0; right:0; top:62%; height:1px; background:#27F2FF; box-shadow:0 0 12px #27F2FF; }
+        .s-neon b { position:absolute; inset:0; display:grid; place-items:center; font-size:52px; letter-spacing:.16em; color:#FF2BD6; text-shadow:0 0 12px #FF2BD6, 0 0 28px #FF2BD6; animation: flicker 2.4s linear infinite; }
+        
+
+        .s-documentary { background:#140E0A; overflow:hidden; }
+        .s-documentary .still { position:absolute; left:-4%; right:-4%; top:0; height:72%; background:linear-gradient(#E0A15A, #E0A15A 42%, #8C3A2F 43%, #231710); animation: ken 8s linear infinite alternate; }
+        .s-documentary .lower { position:absolute; left:0; bottom:14%; background:#E0A15A; color:#140E0A; font-family:Georgia,serif; padding:8px 18px; animation: rise 2.4s ease-out infinite; }
+        
+
+        .s-playful { background:#FFF7F1; color:#241C18; }
+        .s-playful i { position:absolute; border-radius:50%; animation: hop 1.6s cubic-bezier(.34,1.56,.64,1) infinite; }
+        .s-playful .d1 { width:54px; height:54px; left:16%; top:32%; background:#FF6B57; }
+        .s-playful .d2 { width:78px; height:78px; left:40%; top:24%; background:#1FA7A0; animation-delay:.12s; }
+        .s-playful .d3 { width:48px; height:48px; right:16%; top:36%; background:#FFC857; animation-delay:.24s; }
+        .s-playful b { position:absolute; left:0; right:0; bottom:14%; text-align:center; font-size:28px; }
+        
+
+        .s-blueprint { background:#071E36; color:#E5F6FF; background-image:linear-gradient(#7FDBFF22 1px, transparent 1px), linear-gradient(90deg, #7FDBFF22 1px, transparent 1px); background-size:16px 16px; }
+        .s-blueprint svg { position:absolute; inset:0; width:100%; height:100%; }
+        .s-blueprint .draw { stroke-dasharray:720; stroke-dashoffset:720; animation: draw 2.8s ease-in-out infinite; }
+        .s-blueprint small { position:absolute; left:6%; top:8%; letter-spacing:.14em; font-size:12px; }
+        .s-blueprint em { position:absolute; left:0; right:0; bottom:8%; text-align:center; color:#F2C14E; font-style:normal; font-size:12px; letter-spacing:.12em; }
+        
+
+        .s-gradient { background:#1A1030; }
+        .s-gradient i { position:absolute; border-radius:50%; filter:blur(18px); }
+        .s-gradient .a { width:60%; height:80%; left:-10%; top:-20%; background:#6D5BFF; animation: drift 7s ease-in-out infinite; }
+        .s-gradient .b { width:50%; height:70%; right:-8%; top:20%; background:#FFB199; animation: drift 8s ease-in-out infinite reverse; }
+        .s-gradient .c { width:40%; height:50%; left:30%; bottom:-10%; background:#69D2FF; animation: drift 6s ease-in-out infinite; }
+        .s-gradient b { position:absolute; inset:0; display:grid; place-items:center; color:#FFFFFF; font-size:48px; font-weight:500; animation: fade 3s ease-out infinite; }
+        
+
+        .s-comic { background:#FFE14A; border:4px solid #141414; box-sizing:border-box; }
+        .s-comic .burst { position:absolute; left:18%; top:28%; width:90px; height:90px; display:grid; place-items:center; background:#FF3B30; color:#141414; font-weight:800; clip-path:polygon(50% 0,60% 28%,90% 18%,72% 42%,100% 50%,72% 62%,88% 92%,58% 72%,50% 100%,40% 72%,12% 88%,28% 58%,0 50%,28% 38%,10% 12%,42% 28%); animation: pop 1.3s cubic-bezier(.34,1.56,.64,1) infinite; }
+        .s-comic .bubble { position:absolute; right:10%; top:18%; background:#FFFFFF; color:#141414; border:3px solid #141414; border-radius:14px; padding:10px 14px; box-shadow:4px 4px 0 #141414; animation: pop 1.3s cubic-bezier(.34,1.56,.64,1) .12s infinite; }
+        
+    @media (prefers-reduced-motion: reduce) {
+      .stage, .stage * { animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <p>Motion graphic style library</p>
+    <h1>Fourteen studies, looping.</h1>
+    <p>Each tile is the signature move of one Python style library. The settled pose is what you get with reduced motion. Open a style's spec in <code>catalog/</code> for the tokens an agent should follow.</p>
+  </header>
+  <main class="grid">
+    <article class="card">
+  <div class="stage s-swiss">
+        <i class="red"></i>
+        <i class="index">01 / 08</i>
+        <b>SWISS</b>
+        <i class="rule"></i>
+        </div>
+  <h2>Editorial Swiss</h2>
+  <p>A grid, a grotesque, and one red. Type does the explaining.</p>
+  <code>motionstyle_swiss</code>
+</article>
+<article class="card">
+  <div class="stage s-kinetic">
+        <small>MAKE IT</small>
+        <b>SLAM</b>
+        <i class="bar"></i>
+        </div>
+  <h2>Kinetic Type</h2>
+  <p>One word hits, then the next. The sentence is the animation.</p>
+  <code>motionstyle_kinetic</code>
+</article>
+<article class="card">
+  <div class="stage s-glass">
+        <i class="a"></i><i class="b"></i><i class="c"></i><i class="card"><b>Soft glass</b><small>FROSTED PANEL</small></i>
+        </div>
+  <h2>Soft Glass</h2>
+  <p>Frosted panels float on a deep field. Motion is slow enough to feel expensive.</p>
+  <code>motionstyle_glass</code>
+</article>
+<article class="card">
+  <div class="stage s-brutalist">
+        <i class="card"><b>BRUTAL</b><em>MOTION</em></i>
+        </div>
+  <h2>Neo-Brutalist</h2>
+  <p>Chunky cards, hard shadows, and type that behaves like an object.</p>
+  <code>motionstyle_brutalist</code>
+</article>
+<article class="card">
+  <div class="stage s-chalk">
+        <svg viewBox="0 0 320 180" class="board"><circle cx="78" cy="90" r="46" fill="none" stroke="#F3EFE2" stroke-width="4" class="draw"/><line x1="150" y1="108" x2="270" y2="108" stroke="#F2E37A" stroke-width="4" class="draw"/></svg>
+        <b>explain</b>
+        </div>
+  <h2>Chalk Classroom</h2>
+  <p>A dark board, a yellow stick of chalk, and lines that draw themselves.</p>
+  <code>motionstyle_chalk</code>
+</article>
+<article class="card">
+  <div class="stage s-isometric">
+        <i class="cube c1"></i><i class="cube c2"></i><i class="cube c3"></i><small>API</small>
+        </div>
+  <h2>Isometric Studio</h2>
+  <p>Clay-colored blocks assemble into the system you are explaining.</p>
+  <code>motionstyle_isometric</code>
+</article>
+<article class="card">
+  <div class="stage s-signal">
+        <b class="num">32%</b>
+        <i class="bars"><span></span><span></span><span></span><span></span></i>
+        <svg viewBox="0 0 120 60" class="line"><polyline points="0,40 30,28 55,34 85,12 120,20" fill="none" stroke="#3EE0FF" stroke-width="2" class="draw"/></svg>
+        </div>
+  <h2>Data Signal</h2>
+  <p>A dark instrument panel. Numbers count and charts draw while the sentence does.</p>
+  <code>motionstyle_signal</code>
+</article>
+<article class="card">
+  <div class="stage s-papercut">
+        <i class="s1"></i><i class="s2"></i><i class="s3"><b>Story</b></i><i class="tab"></i>
+        </div>
+  <h2>Paper Cut</h2>
+  <p>Colored sheets slide into a stack. The diagram has thickness.</p>
+  <code>motionstyle_papercut</code>
+</article>
+<article class="card">
+  <div class="stage s-neon">
+        <i class="floor"></i>
+        <b>NEON</b>
+        </div>
+  <h2>Neon Night</h2>
+  <p>Two tubes of light on a black street. They flicker on, then hold a pulse.</p>
+  <code>motionstyle_neon</code>
+</article>
+<article class="card">
+  <div class="stage s-documentary">
+        <i class="still"></i>
+        <i class="lower">Field notes</i>
+        </div>
+  <h2>Warm Documentary</h2>
+  <p>A still, a slow push, and a lower third. The story is allowed to take its time.</p>
+  <code>motionstyle_documentary</code>
+</article>
+<article class="card">
+  <div class="stage s-playful">
+        <i class="d1"></i><i class="d2"></i><i class="d3"></i><b>Hello</b>
+        </div>
+  <h2>Playful Flat</h2>
+  <p>Round shapes, a short hop, and colors that feel like stickers.</p>
+  <code>motionstyle_playful</code>
+</article>
+<article class="card">
+  <div class="stage s-blueprint">
+        <small>A-01</small>
+        <svg viewBox="0 0 320 180"><rect x="36" y="28" width="248" height="110" fill="none" stroke="#7FDBFF" stroke-width="1.5" class="draw"/></svg>
+        <em>490</em>
+        </div>
+  <h2>Blueprint</h2>
+  <p>A plan on navy paper. Lines draw, then the dimensions appear.</p>
+  <code>motionstyle_blueprint</code>
+</article>
+<article class="card">
+  <div class="stage s-gradient">
+        <i class="a"></i><i class="b"></i><i class="c"></i><b>Flow</b>
+        </div>
+  <h2>Liquid Gradient</h2>
+  <p>Color fields drift. One line of type is enough.</p>
+  <code>motionstyle_gradient</code>
+</article>
+<article class="card">
+  <div class="stage s-comic">
+        <i class="burst">POW</i>
+        <i class="bubble">Again!</i>
+        </div>
+  <h2>Comic Pop</h2>
+  <p>A panel, a burst, and a bubble. The point lands like a sound effect.</p>
+  <code>motionstyle_comic</code>
+</article>
+  </main>
+</body>
+</html>

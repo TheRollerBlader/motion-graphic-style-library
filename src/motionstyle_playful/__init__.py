@@ -1,0 +1,76 @@
+"""Playful flat. Squash, stretch, and a short colored shadow."""
+
+from motionstyle_core import clip, font, make_style, spring
+
+STYLE = make_style(
+    id="playful",
+    name="Playful Flat",
+    tagline="Round shapes, a short hop, and colors that feel like stickers.",
+    best_for=("onboarding", "consumer apps", "friendly explainers", "first-run tours"),
+    aliases=("playful", "flat illustration", "bouncy UI", "friendly motion", "squircle"),
+    palette=dict(
+        background="#FFF7F1",
+        background_raised="#FFE8D6",
+        surface="#FFFFFF",
+        ink="#241C18",
+        text="#241C18",
+        text_dim="#7A6A62",
+        primary="#FF6B57",
+        primary_light="#FF9B8A",
+        primary_dark="#E14B38",
+        secondary="#1FA7A0",
+        accent="#FFC857",
+        danger="#E14B38",
+        ok="#1FA7A0",
+        info="#5B6CFF",
+    ),
+    display=font("Avenir Next Rounded, Arial Rounded MT Bold, Nunito, sans-serif", 800, -0.02, "none", 1.0),
+    body=font("Avenir Next Rounded, Nunito, Helvetica Neue, sans-serif", 600, 0.0, "none", 1.35),
+    mono=font("SF Mono, ui-monospace, Menlo, Consolas, monospace", 600, 0.02, "none", 1.2),
+    shape=dict(
+        radius_px=28,
+        border_px=0,
+        border_color="#241C18",
+        shadow="0 8px 0 #F0C2B4",
+        blur_px=0,
+        notes="The shadow is a short solid offset in a tint of the background, not a blur and not black. Shapes are squircles and circles.",
+    ),
+    motion_character="Squash and stretch, then a small overshoot. Elements hop into place one after another. The idle is a bob, not a spin.",
+    springs=(spring("pop", 280, 12, 0.7),),
+    clips=(
+        clip("pop_scale", 0.48, "ease-out-back", "scale", ((0, 0.4), (1, 1)), "Origin center. The back ease provides the overshoot. Do not add a second bounce keyframe."),
+        clip("squash", 0.48, "ease-out", "scaleX", ((0, 1.18), (1, 1)), "Pair with scaleY moving from 0.82 to 1 so volume feels constant."),
+        clip("idle_bob", 1.4, "ease-in-out", "y", ((0, 0), (0.5, -6), (1, 0)), "Loop the hero only."),
+    ),
+    stagger_s=0.07,
+    idle="The hero shape bobs six pixels. Friends stay still so the frame does not bounce everywhere.",
+    chrome=(
+        "Background is warm paper. Shapes sit on it like stickers.",
+        "Use three fills at most in one frame, chosen from primary, secondary, accent, and info.",
+        "Faces, if any, are two dots and a short line. No realistic illustration.",
+        "Buttons and chips use the same radius and the same short shadow.",
+    ),
+    primitives=(
+        "Sticker: squircle or circle, flat fill, short shadow, pop_scale plus squash.",
+        "HeroTitle: rounded display face, ink, one line.",
+        "DotRow: a repeated sticker staggered by stagger_s.",
+        "Chip: a small surface or accent sticker used as a label.",
+    ),
+    caption="A white sticker along the bottom with the short shadow. Current word is primary. The caption does not use a thin sans if the title is rounded. Match the rounded face.",
+    dos=(
+        "Squash on the way in, settle to a circle or squircle, then bob only the hero.",
+        "Keep outlines off. Color edges are enough.",
+        "Time the hops to the beats of the sentence.",
+    ),
+    donts=(
+        "Do not use black brutalist shadows, glass, or neon glow.",
+        "Do not rotate stickers more than a few degrees.",
+        "Do not fill the frame edge to edge. The paper margin is the smile.",
+        "Do not use this style for bad news, legal, or medical content.",
+    ),
+    agent_rules=(
+        "The shadow is an 8px solid tint, not a blur and not ink.",
+        "Overshoot comes from ease-out-back. Do not stack extra bounce keyframes.",
+        "Only one shape bobs during a hold.",
+    ),
+)

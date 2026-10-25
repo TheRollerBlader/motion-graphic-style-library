@@ -1,0 +1,77 @@
+"""Soft glass. Frosted panels on a deep colored field."""
+
+from motionstyle_core import clip, font, make_style, spring
+
+STYLE = make_style(
+    id="glass",
+    name="Soft Glass",
+    tagline="Frosted panels float on a deep field. Motion is slow enough to feel expensive.",
+    best_for=("AI products", "fintech", "calm explainers", "feature tours"),
+    aliases=("glassmorphism", "frosted glass", "soft glass", "translucent panels", "glass UI"),
+    palette=dict(
+        background="#0C1024",
+        background_raised="#171C36",
+        surface="#F4F7FF",
+        ink="#F7F8FF",
+        text="#F4F6FF",
+        text_dim="#B7C0DC",
+        primary="#A7B4FF",
+        primary_light="#D5DCFF",
+        primary_dark="#6E7CFF",
+        secondary="#6E7CFF",
+        accent="#F2B8FF",
+        danger="#FF8B9A",
+        ok="#8EF0C4",
+        info="#9FD4FF",
+    ),
+    spots=(("glow", "#7C6CFF"), ("field", "#24164A")),
+    display=font("Helvetica Neue, Helvetica, Arial, sans-serif", 560, -0.02, "none", 1.0),
+    body=font("Helvetica Neue, Helvetica, Arial, sans-serif", 450, 0.0, "none", 1.45),
+    mono=font("SF Mono, ui-monospace, Menlo, Consolas, monospace", 500, 0.02, "none", 1.3),
+    shape=dict(
+        radius_px=28,
+        border_px=1,
+        border_color="#FFFFFF",
+        shadow="0 24px 60px rgba(4, 6, 20, 0.35)",
+        blur_px=28,
+        notes="Panels fill surface at 16% opacity over a 28px backdrop blur. The border is white at 22% opacity. Do not paint panels as solid white.",
+    ),
+    motion_character="Float, don't snap. Panels rise a short distance and fade. Nothing overshoots. Blur on the backdrop stays constant. Do not animate the blur radius.",
+    springs=(spring("panel", 140, 22, 1.0),),
+    clips=(
+        clip("card_y", 0.8, "cubic-bezier(0.22, 1, 0.36, 1)", "y", ((0, 28), (1, 0)), "Short rise. The panel should feel placed, not dropped."),
+        clip("card_opacity", 0.6, "ease-out", "opacity", ((0, 0), (1, 1)), "Starts with card_y. Do not fade the whole frame, only the panel."),
+        clip("idle_float", 4.5, "linear", "y", ((0, 0), (0.5, -8), (1, 0)), "Loop the held panel. Amplitude stays inside 8px."),
+    ),
+    stagger_s=0.1,
+    idle="Held panels drift up and down by a few pixels on a long loop. Background orbs drift even more slowly.",
+    chrome=(
+        "Background is a deep field with two or three large, soft orbs in primary, accent, and glow. Orbs are out of focus, never hard circles.",
+        "One main panel per beat. A second panel only if the sentence is a comparison.",
+        "Labels are small, text_dim, and sit just above the panel's title.",
+        "Icons are thin strokes in ink, not filled glyphs and not emoji.",
+    ),
+    primitives=(
+        "Field: background plus two drifting orbs. This is not a flat color.",
+        "GlassPanel: radius, blur, 16% surface fill, 1px white border at 22% opacity.",
+        "Eyebrow: 13px text_dim label, tracking 0.08em, uppercase.",
+        "DisplayTitle: one line inside the panel, weight 560, never uppercase.",
+    ),
+    caption="A slim glass bar along the bottom safe margin. Current word is ink. Surrounding words are text_dim. The bar uses the same blur and border as GlassPanel, at a smaller radius of 16px.",
+    dos=(
+        "Keep contrast by putting type on the panel, not directly on a bright orb.",
+        "Use accent sparingly, usually one number or one keyword.",
+        "Let scenes breathe. Empty field around the panel is part of the style.",
+    ),
+    donts=(
+        "Do not use hard offset shadows, thick black borders, or 0px radius.",
+        "Do not bounce or use a snappy spring.",
+        "Do not stack more than two panels.",
+        "Do not animate backdrop blur.",
+    ),
+    agent_rules=(
+        "A hard black shadow means the frame has left this style.",
+        "Panels are translucent. If the background cannot be seen through the card, the blur and fill are wrong.",
+        "Entrances rise a short way. They do not fly in from offscreen.",
+    ),
+)

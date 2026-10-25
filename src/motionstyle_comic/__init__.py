@@ -1,0 +1,76 @@
+"""Comic pop. Halftone, a thick ink line, and a hit frame."""
+
+from motionstyle_core import clip, font, make_style, spring
+
+STYLE = make_style(
+    id="comic",
+    name="Comic Pop",
+    tagline="A panel, a burst, and a bubble. The point lands like a sound effect.",
+    best_for=("social explainers", "contrasts", "punchy education", "wrong versus right"),
+    aliases=("comic", "pop art", "halftone", "speech bubble", "ben-day"),
+    palette=dict(
+        background="#FFF7E8",
+        background_raised="#FFE14A",
+        surface="#FFFFFF",
+        ink="#141414",
+        text="#141414",
+        text_dim="#3A3A3A",
+        primary="#FF3B30",
+        primary_light="#FF7A72",
+        primary_dark="#C4121A",
+        secondary="#1C6BFF",
+        accent="#FFE14A",
+        danger="#FF3B30",
+        ok="#1F9D55",
+        info="#1C6BFF",
+    ),
+    display=font("Comic Sans MS, Comic Neue, cursive", 700, 0.0, "upper", 0.9),
+    body=font("Comic Sans MS, Comic Neue, cursive", 700, 0.0, "none", 1.25),
+    mono=font("SF Mono, ui-monospace, Menlo, Consolas, monospace", 700, 0.04, "upper", 1.1),
+    shape=dict(
+        radius_px=18,
+        border_px=4,
+        border_color="#141414",
+        shadow="6px 6px 0 #141414",
+        blur_px=0,
+        notes="Every panel, bubble, and burst has a 4px ink outline and a hard shadow. Halftone dots sit behind the burst, in primary or secondary at about 35% opacity, not over the type.",
+    ),
+    motion_character="A hit. The burst scales in with a short overshoot, the bubble follows, and a two-step shake sells the impact. Then it holds. Do not keep shaking.",
+    springs=(spring("impact", 640, 14, 0.6),),
+    clips=(
+        clip("pop_scale", 0.36, "ease-out-back", "scale", ((0, 0.3), (1, 1)), "Use on the burst and on sound-effect words."),
+        clip("shake_x", 0.28, "linear", "x", ((0, 0), (0.25, -8), (0.5, 6), (0.75, -3), (1, 0)), "Play once as the burst lands. Do not loop it."),
+        clip("bubble_in", 0.32, "ease-out-back", "scale", ((0, 0.7), (1, 1)), "Starts a stagger after the burst. Origin is the tail of the bubble."),
+    ),
+    stagger_s=0.06,
+    idle="Halftone dots do not animate. A held panel stays. If the beat is long, blink a small star once. Do not loop the shake.",
+    chrome=(
+        "The frame is a panel: 4px ink border inset from the canvas edge.",
+        "One burst per beat for the idea that should feel like a hit. The other idea can be a plain panel.",
+        "Speech bubbles have a tail aimed at the thing speaking. Tails are part of the shape, same border.",
+        "Sound-effect words (the display face, uppercase, primary or accent) are allowed and encouraged.",
+    ),
+    primitives=(
+        "Panel: full-frame ink border and hard shadow language, background paper or accent.",
+        "Burst: a 12-point starburst, primary or accent fill, ink outline, pop_scale and a single shake_x.",
+        "Bubble: white surface, 18px radius, tail, bubble_in.",
+        "Halftone: dots behind the burst only.",
+    ),
+    caption="The speech bubble is the caption. Underline or recolor the current word in primary. Do not add a second caption bar outside the bubble.",
+    dos=(
+        "Stage contrasts as two panels or a burst against a quiet panel.",
+        "Hit once, then hold so the line can be read.",
+        "Keep the palette to paper, ink, red, blue, and yellow.",
+    ),
+    donts=(
+        "Do not use soft shadows, blur, or thin elegant type.",
+        "Do not loop the shake.",
+        "Do not cover the bubble text with halftone.",
+        "Do not use this style for somber, legal, or medical stories.",
+    ),
+    agent_rules=(
+        "The outline is 4px ink. A borderless shape has left the style.",
+        "Shake plays once, on the hit. Idle is still.",
+        "Halftone stays behind the burst. If it touches the letters, pull it back.",
+    ),
+)

@@ -1,0 +1,75 @@
+"""Neon night. Glow is the light source. The rest of the frame stays nearly black."""
+
+from motionstyle_core import clip, font, make_style
+
+STYLE = make_style(
+    id="neon",
+    name="Neon Night",
+    tagline="Two tubes of light on a black street. They flicker on, then hold a pulse.",
+    best_for=("launches", "games", "music", "nightlife products"),
+    aliases=("neon", "synthwave", "glow type", "night city", "cyber glow"),
+    palette=dict(
+        background="#07060F",
+        background_raised="#120E1C",
+        surface="#120E1C",
+        ink="#F8F6FF",
+        text="#F8F6FF",
+        text_dim="#9A93B0",
+        primary="#FF2BD6",
+        primary_light="#FF8AE8",
+        primary_dark="#C0009A",
+        secondary="#8A7CFF",
+        accent="#27F2FF",
+        danger="#FF2BD6",
+        ok="#B6FF3C",
+        info="#27F2FF",
+    ),
+    display=font("Arial Black, Impact, Helvetica Neue, sans-serif", 900, 0.08, "upper", 0.9),
+    body=font("Helvetica Neue, Helvetica, Arial, sans-serif", 500, 0.04, "none", 1.4),
+    mono=font("SF Mono, ui-monospace, Menlo, Consolas, monospace", 600, 0.12, "upper", 1.2),
+    shape=dict(
+        radius_px=2,
+        border_px=1.5,
+        border_color="#27F2FF",
+        shadow="0 0 16px #27F2FF",
+        blur_px=0,
+        notes="Borders are the neon tube: 1.5px accent or primary, plus a matching glow. Filled panels are rare. Pills can go fully round. Do not frost the panel like glass.",
+    ),
+    motion_character="A tube flickers on, then the glow breathes. The flicker is short and happens once. The pulse is the idle, not another flicker.",
+    clips=(
+        clip("flicker", 0.45, "linear", "opacity", ((0, 0), (0.15, 1), (0.22, 0.15), (0.35, 1), (1, 1)), "Play once on entrance. Do not loop the off frame."),
+        clip("glow", 0.45, "ease-out", "blur", ((0, 2), (1, 16)), "This is the glow radius, not a backdrop blur. Apply it to a duplicate of the stroke sitting behind the sharp tube."),
+        clip("idle_pulse", 1.8, "ease-in-out", "scale", ((0, 1), (0.5, 1.03), (1, 1)), "Loop the glow's strength or the scale. Do not restroke the word."),
+    ),
+    stagger_s=0.05,
+    idle="The tube's glow radius eases between about 10px and 18px. The word stays sharp on top.",
+    chrome=(
+        "Background stays near black. A few perspective lines in text_dim at 25% opacity are enough city.",
+        "Primary magenta and accent cyan are the two tubes. Do not introduce a third glow color in the same frame.",
+        "Display type is uppercase and tracked out. It is the sign.",
+        "Ok green is a status pip, not a fill.",
+    ),
+    primitives=(
+        "Night: background plus optional one-point perspective lines.",
+        "TubeWord: display type, flicker then glow, sharp ink copy on top of the blurred copy.",
+        "TubeRule: a horizontal or circular stroke in accent, same flicker and glow.",
+        "SignBox: 2px radius frame in accent, used once, not around every label.",
+    ),
+    caption="Small mono line, text_dim, under the sign. The current word switches to accent. No filled caption bar.",
+    dos=(
+        "Keep a sharp copy of every glowing stroke so the word stays readable.",
+        "Flicker once, then pulse.",
+        "Leave the frame mostly black. Neon needs the dark.",
+    ),
+    donts=(
+        "Do not use this style for finance, medicine, or anything that should feel careful.",
+        "Do not fill large rectangles with magenta.",
+        "Do not loop the flicker. It reads as a broken sign.",
+        "Do not add glass blur behind the type.",
+    ),
+    agent_rules=(
+        "Two glow colors maximum in a frame: magenta and cyan.",
+        "The flicker clip plays once. Idle is the pulse.",
+        "If the background is light, stop and switch styles. Neon does not sit on paper.",
+    ),
+)

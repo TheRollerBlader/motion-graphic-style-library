@@ -1,0 +1,76 @@
+"""Chalk classroom. Drawings appear as if a hand is still on the board."""
+
+from motionstyle_core import clip, font, make_style
+
+STYLE = make_style(
+    id="chalk",
+    name="Chalk Classroom",
+    tagline="A dark board, a yellow stick of chalk, and lines that draw themselves.",
+    best_for=("lessons", "how-it-works", "tutorials", "classroom explainers"),
+    aliases=("chalk", "chalkboard", "classroom", "hand drawn lesson", "blackboard"),
+    palette=dict(
+        background="#123127",
+        background_raised="#1A4334",
+        surface="#16392C",
+        ink="#F3EFE2",
+        text="#F3EFE2",
+        text_dim="#C5D2C2",
+        primary="#F2E37A",
+        primary_light="#FFF3B0",
+        primary_dark="#CDB84A",
+        secondary="#F2A3C7",
+        accent="#9FD7C8",
+        danger="#F0A08A",
+        ok="#B7E3A1",
+        info="#F2E37A",
+    ),
+    spots=(("dust", "#E7E2CC"),),
+    display=font("Chalkduster, Bradley Hand, Segoe Print, cursive", 700, 0.01, "none", 1.05),
+    body=font("Chalkduster, Bradley Hand, Segoe Print, cursive", 500, 0.0, "none", 1.35),
+    mono=font("SF Mono, ui-monospace, Menlo, Consolas, monospace", 500, 0.0, "none", 1.2),
+    shape=dict(
+        radius_px=0,
+        border_px=0,
+        border_color="#F3EFE2",
+        shadow="none",
+        blur_px=0,
+        notes="Strokes are 4 to 7px, slightly uneven, and capped round. A perfect vector circle is wrong unless you break it with a small hand wobble.",
+    ),
+    motion_character="Draw-on. Strokes reveal along their length, the way chalk leaves the stick. Words fade in only after the drawing they name has started. Dust settles. Nothing slams.",
+    clips=(
+        clip("stroke_draw", 0.9, "ease-in-out", "strokeOffset", ((0, 1), (1, 0)), "1 is hidden, 0 is fully drawn. Pair with a slightly wobbly path."),
+        clip("word_opacity", 0.4, "ease-out", "opacity", ((0, 0), (1, 1)), "Start this when the related stroke is about halfway, not at the cut."),
+        clip("idle_dust", 2.8, "linear", "opacity", ((0, 0.25), (0.5, 0.55), (1, 0.25)), "A few dust specks near the last stroke. Loop. Do not flicker the whole board."),
+    ),
+    stagger_s=0.12,
+    idle="Dust motes pulse near the freshest line. Finished strokes stay put.",
+    chrome=(
+        "The board is the whole frame. A faint wiped rectangle can mark the previous lesson. Do not float a card.",
+        "Yellow chalk is the current idea. Pink is the aside. Mint is a supporting arrow or check.",
+        "Underlines are drawn, not typed as a border.",
+        "Leave the edges of the board a little darker than the center.",
+    ),
+    primitives=(
+        "Board: background with a soft vignette and a handful of static dust specks.",
+        "ChalkStroke: any line, circle, arrow, or box driven by stroke_draw.",
+        "ChalkWord: display word in ink or primary, brought in with word_opacity.",
+        "Aside: a short pink note, smaller, off to the side of the main drawing.",
+    ),
+    caption="The spoken line is written in chalk under the drawing. The current word is primary yellow. Do not put the caption in a pill or a sans-serif UI font.",
+    dos=(
+        "Draw the thing being named. An arrow, a circle, a tally, a simple face of a diagram.",
+        "Start the stroke as the noun is spoken.",
+        "Keep diagrams to a few marks. A board crammed with boxes is a slide, not chalk.",
+    ),
+    donts=(
+        "Do not use glass, gradients-as-fills, or hard UI shadows.",
+        "Do not use a geometric sans for the lesson text.",
+        "Do not pop elements in with a scale overshoot.",
+        "Do not leave the board blank between sentences.",
+    ),
+    agent_rules=(
+        "If the type is Helvetica, it is the wrong style. Use the chalk face.",
+        "Strokes draw on. They do not fade in as finished shapes.",
+        "Yellow means now. Do not paint the whole diagram yellow.",
+    ),
+)

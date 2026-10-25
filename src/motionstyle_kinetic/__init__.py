@@ -1,0 +1,70 @@
+"""Kinetic type. The words are the picture."""
+
+from motionstyle_core import clip, font, make_style, spring
+
+STYLE = make_style(
+    id="kinetic",
+    name="Kinetic Type",
+    tagline="One word hits, then the next. The sentence is the animation.",
+    best_for=("hooks", "title cards", "manifesto lines", "social openers"),
+    aliases=("kinetic type", "kinetic typography", "slam titles", "word animation", "type in motion"),
+    palette=dict(
+        background="#090909",
+        background_raised="#141414",
+        surface="#090909",
+        ink="#F4F4F0",
+        text="#F4F4F0",
+        text_dim="#9A9A92",
+        primary="#F5E642",
+        primary_light="#FFF38A",
+        primary_dark="#C9B400",
+        secondary="#F4F4F0",
+        accent="#F5E642",
+        danger="#FF5A36",
+        ok="#B6F25C",
+        info="#8AB4FF",
+    ),
+    display=font("Arial Black, Impact, Haettenschweiler, sans-serif", 900, -0.03, "upper", 0.82),
+    body=font("Helvetica Neue, Helvetica, Arial, sans-serif", 700, 0.08, "upper", 1.1),
+    mono=font("SF Mono, ui-monospace, Menlo, Consolas, monospace", 600, 0.04, "upper", 1.0),
+    shape=dict(radius_px=0, border_px=0, border_color="#F4F4F0", shadow="none", blur_px=0, notes="No cards. A yellow rule or a yellow word is the only chrome."),
+    motion_character="Heavy and fast. Words scale down into place and land with a short overshoot. The underline finishes after the word, not before it.",
+    springs=(spring("impact", 520, 18, 0.7),),
+    clips=(
+        clip("slam_scale", 0.42, "ease-out-back", "scale", ((0, 1.22), (1, 1)), "Origin is the word's center. One word per slam."),
+        clip("word_y", 0.42, "ease-out", "y", ((0, 22), (1, 0)), "Pairs with slam_scale. Do not also fade from 0 if the scale read is already clear."),
+        clip("underline_wipe", 0.28, "ease-out", "scaleX", ((0, 0), (1, 1)), "Origin left, under the word that just landed. Color is primary."),
+        clip("idle_pulse", 1.6, "ease-in-out", "scale", ((0, 1), (0.5, 1.025), (1, 1)), "A breath on the held word. Do not loop the slam."),
+    ),
+    stagger_s=0.08,
+    idle="The held word breathes by about two percent. The underline stays.",
+    chrome=(
+        "One idea per frame, usually one to four words. If the sentence is longer, advance word by word.",
+        "The emphasized word is primary yellow. Supporting words are ink.",
+        "Safe margins stay large. Type can bleed only when it is the slam itself.",
+        "No icons, windows, or device frames. If a symbol is required, set it in the display face.",
+    ),
+    primitives=(
+        "SlamWord: display word driven by slam_scale and word_y.",
+        "SupportLine: smaller uppercase words in text_dim, staggered by stagger_s.",
+        "YellowRule: underline_wipe in primary, thickness about 0.08 of the word height.",
+        "HoldBreath: idle_pulse on the word that should stay after the line is done.",
+    ),
+    caption="Kinetic frames usually are the caption. Do not add a second subtitle line. If narration must be visible, set the current word in primary and the rest in text_dim, in the display face, not a small UI font.",
+    dos=(
+        "Time each slam to the syllable being spoken.",
+        "Use scale and position. A pure opacity fade is not kinetic type.",
+        "Keep the background flat so the word reads at a glance.",
+    ),
+    donts=(
+        "Do not put a paragraph on screen.",
+        "Do not use rounded cards, glass, or soft shadows.",
+        "Do not slam two words at the same time.",
+        "Do not animate tracking so wide that the word breaks apart.",
+    ),
+    agent_rules=(
+        "If a frame contains a sentence-length paragraph, it is the wrong style or the wrong cut.",
+        "Yellow marks the word being said now. It does not mark decoration.",
+        "The slam eases out with a short overshoot. It does not bounce like a toy.",
+    ),
+)

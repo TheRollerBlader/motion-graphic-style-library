@@ -1,0 +1,75 @@
+"""Blueprint. Cyan lines on navy. The drawing is the explanation."""
+
+from motionstyle_core import clip, font, make_style
+
+STYLE = make_style(
+    id="blueprint",
+    name="Blueprint",
+    tagline="A plan on navy paper. Lines draw, then the dimensions appear.",
+    best_for=("engineering", "how it's built", "process", "technical explainers"),
+    aliases=("blueprint", "schematic", "technical drawing", "cyan line", "engineering diagram"),
+    palette=dict(
+        background="#071E36",
+        background_raised="#0A2744",
+        surface="#071E36",
+        ink="#E5F6FF",
+        text="#E5F6FF",
+        text_dim="#8FB4C9",
+        primary="#7FDBFF",
+        primary_light="#C7F1FF",
+        primary_dark="#3AA7CC",
+        secondary="#F2C14E",
+        accent="#FFFFFF",
+        danger="#FF8A7A",
+        ok="#9BE7C4",
+        info="#7FDBFF",
+    ),
+    display=font("Helvetica Neue, Helvetica, Arial, sans-serif", 500, 0.14, "upper", 1.0),
+    body=font("Helvetica Neue, Helvetica, Arial, sans-serif", 400, 0.04, "none", 1.4),
+    mono=font("SF Mono, ui-monospace, Menlo, Consolas, monospace", 500, 0.08, "upper", 1.2),
+    shape=dict(
+        radius_px=0,
+        border_px=1,
+        border_color="#7FDBFF",
+        shadow="none",
+        blur_px=0,
+        notes="Everything is a stroke. Large fills, if any, are primary at about 8% opacity. Corners are square. Dimension text is secondary, the construction yellow.",
+    ),
+    motion_character="A draftsman's hand. The outline draws, ticks appear when the line reaches them, then the label fades. No bounce and no fill animation.",
+    clips=(
+        clip("stroke_draw", 1.05, "ease-in-out", "strokeOffset", ((0, 1), (1, 0)), "Draw closed shapes as a single path so the line does not appear on all four sides at once."),
+        clip("tick_in", 0.2, "ease-out", "opacity", ((0, 0), (1, 1)), "Start when stroke_draw reaches the corner or measurement the tick belongs to."),
+        clip("label_in", 0.35, "ease-out", "opacity", ((0, 0), (1, 1)), "Labels follow ticks. They do not lead the line."),
+    ),
+    stagger_s=0.04,
+    idle="A small cursor or an endpoint blinks. Finished lines hold.",
+    chrome=(
+        "A fine grid covers the sheet in primary at about 12% opacity.",
+        "A title block sits in one corner: style name, sheet number, mono.",
+        "Dimension strings use secondary and sit off the object, with extension lines.",
+        "Callouts are leaders, not speech bubbles.",
+    ),
+    primitives=(
+        "Sheet: navy background plus the fine grid and a title block.",
+        "PlanStroke: square-cornered path driven by stroke_draw.",
+        "Dimension: extension lines, ticks, and a yellow measure driven by tick_in and label_in.",
+        "Leader: a short elbow line pointing at a part, label at the end.",
+    ),
+    caption="Mono, bottom margin, inside the sheet border. Wrap the current phrase in square brackets. Color the brackets and the current phrase primary. The rest is text_dim.",
+    dos=(
+        "Explain by drawing the object, then labeling the part just drawn.",
+        "Keep strokes at one or two weights: hairline for the grid, 2px for the object.",
+        "Use yellow only for dimensions and warnings.",
+    ),
+    donts=(
+        "Do not fill shapes with solid cyan.",
+        "Do not round the plan geometry.",
+        "Do not use photos, glass, or soft shadows.",
+        "Do not drop the whole schematic in already drawn.",
+    ),
+    agent_rules=(
+        "The line draws itself. A shape that fades in finished has skipped stroke_draw.",
+        "Yellow is for measurements. A yellow filled button is the wrong style.",
+        "Square corners only. Radius belongs on a different style.",
+    ),
+)

@@ -1,0 +1,77 @@
+"""Isometric studio. Soft clay objects assemble on a paper ground."""
+
+from motionstyle_core import clip, font, make_style, spring
+
+STYLE = make_style(
+    id="isometric",
+    name="Isometric Studio",
+    tagline="Clay-colored blocks assemble into the system you are explaining.",
+    best_for=("systems", "architecture", "pipelines", "product maps"),
+    aliases=("isometric", "iso illustration", "clay 3d", "system diagram", "exploded blocks"),
+    palette=dict(
+        background="#E6E1D8",
+        background_raised="#F7F4EF",
+        surface="#F4EFE6",
+        ink="#2B2A28",
+        text="#2B2A28",
+        text_dim="#6E675F",
+        primary="#E07A5F",
+        primary_light="#F0A48F",
+        primary_dark="#C45B42",
+        secondary="#3D405B",
+        accent="#81B29A",
+        danger="#C44536",
+        ok="#81B29A",
+        info="#3D5A80",
+    ),
+    spots=(("sand", "#F2CC8F"), ("clay", "#E07A5F"), ("sage", "#81B29A")),
+    display=font("Helvetica Neue, Helvetica, Arial, sans-serif", 700, -0.02, "none", 1.0),
+    body=font("Helvetica Neue, Helvetica, Arial, sans-serif", 500, 0.0, "none", 1.4),
+    mono=font("SF Mono, ui-monospace, Menlo, Consolas, monospace", 600, 0.04, "upper", 1.2),
+    shape=dict(
+        radius_px=14,
+        border_px=0,
+        border_color="#2B2A28",
+        shadow="0 18px 30px rgba(40, 36, 30, 0.16)",
+        blur_px=0,
+        notes="Labels are soft rounded rectangles. The isometric objects themselves are hard geometry with three faces: top, left, right. Contact shadows are ellipses on the ground, not drop shadows copied onto the type.",
+    ),
+    motion_character="Blocks drop onto the ground plane and settle. Later blocks wait their stagger. Nothing spins in true 3D. The camera is locked to the isometric angle.",
+    springs=(spring("block", 300, 24, 1.0),),
+    clips=(
+        clip("block_y", 0.5, "ease-out", "y", ((0, -48), (1, 0)), "Vertical in screen space, which reads as lowering onto the floor."),
+        clip("block_scale", 0.5, "ease-out", "scale", ((0, 0.94), (1, 1)), "A small settle with block_y. No overshoot past 1."),
+        clip("idle_bob", 3.6, "ease-in-out", "y", ((0, 0), (0.5, -4), (1, 0)), "Only the hero block bobs. The rest of the assembly stays put."),
+    ),
+    stagger_s=0.08,
+    idle="The hero block lifts four pixels and returns. Contact shadows stay on the floor.",
+    chrome=(
+        "Ground is a warm paper color. A faint ellipse under the group is the floor, not a horizon line.",
+        "Three face tones per object: light top, mid left, dark right, all mixed from one palette color.",
+        "Labels sit beside objects, not on top of them, in a surface chip with the soft shadow.",
+        "Arrows between blocks are short and flat, in ink, drawn after both blocks have landed.",
+    ),
+    primitives=(
+        "Floor: background plus one soft contact ellipse.",
+        "IsoBlock: three faces, entered with block_y and block_scale.",
+        "LabelChip: surface fill, 14px radius, one line of body type.",
+        "Connector: a short ink path that draws on after its two blocks exist.",
+    ),
+    caption="A quiet line under the floor group, ink on the paper, no card. The current noun is primary. Do not cover the blocks with the caption.",
+    dos=(
+        "Build the system in the order the narration names the parts.",
+        "Keep the isometric angle consistent for the whole video.",
+        "Use sand, clay, sage, and secondary so objects are distinguishable without labels doing all the work.",
+    ),
+    donts=(
+        "Do not rotate the camera or tumble a cube.",
+        "Do not use neon, thick comic borders, or glass.",
+        "Do not stack type on the top face unless it is a one-word label.",
+        "Do not drop every block on the same frame.",
+    ),
+    agent_rules=(
+        "The angle stays isometric. A front-on rectangle is a label, not an object.",
+        "Stagger the assembly. A finished diagram on frame one skips the explanation.",
+        "Shadows sit on the floor as ellipses. They do not follow the block as a CSS drop shadow.",
+    ),
+)

@@ -1,0 +1,77 @@
+"""Data signal. Charts draw on, numbers count, the room stays dark."""
+
+from motionstyle_core import clip, font, make_style
+
+STYLE = make_style(
+    id="signal",
+    name="Data Signal",
+    tagline="A dark instrument panel. Numbers count and charts draw while the sentence does.",
+    best_for=("metrics", "research findings", "earnings explainers", "product analytics"),
+    aliases=("data viz", "dashboard", "charts", "metrics explainer", "dark analytics"),
+    palette=dict(
+        background="#070B16",
+        background_raised="#101828",
+        surface="#0E1728",
+        ink="#E8F1FF",
+        text="#E7F0FA",
+        text_dim="#8AA0B8",
+        primary="#3EE0FF",
+        primary_light="#A8F4FF",
+        primary_dark="#1498B8",
+        secondary="#7AA2FF",
+        accent="#FFB020",
+        danger="#FF5D73",
+        ok="#3DDC97",
+        info="#7AA2FF",
+    ),
+    spots=(("grid", "#17304A"),),
+    display=font("Helvetica Neue, Helvetica, Arial, sans-serif", 600, -0.03, "none", 0.95),
+    body=font("Helvetica Neue, Helvetica, Arial, sans-serif", 450, 0.0, "none", 1.4),
+    mono=font("SF Mono, ui-monospace, Menlo, Consolas, monospace", 600, 0.02, "none", 1.1),
+    shape=dict(
+        radius_px=8,
+        border_px=1,
+        border_color="#17304A",
+        shadow="none",
+        blur_px=0,
+        notes="Panels are flat surface fills with a 1px grid-colored border. Bars and lines are the picture. Do not put a glow on every series.",
+    ),
+    motion_character="Instrument-like. Bars grow from the baseline, lines draw left to right, and numerals count. Easing arrives and stops. No bounce.",
+    clips=(
+        clip("bar_grow", 0.7, "ease-out", "scaleY", ((0, 0), (1, 1)), "Transform origin is the baseline. Stagger neighboring bars."),
+        clip("line_draw", 0.9, "ease-in-out", "strokeOffset", ((0, 1), (1, 0)), "Draw the series in the direction of time, left to right."),
+        clip("count_up", 0.8, "ease-out", "progress", ((0, 0), (1, 1)), "Map progress onto the displayed number. Do not spin digits like a slot machine."),
+        clip("tick_in", 0.25, "ease-out", "opacity", ((0, 0), (1, 1)), "Axis ticks and the end dot appear as the series reaches them."),
+    ),
+    stagger_s=0.06,
+    idle="A caret or the latest point pulses opacity between 0.45 and 1. Axes do not move.",
+    chrome=(
+        "A faint grid in the grid spot color sits behind the plot, not across the whole frame.",
+        "One highlighted series uses primary. A comparison series uses secondary. Accent marks the annotated point, once.",
+        "Units and axis labels are mono and text_dim.",
+        "The big number and the chart must agree. Do not show 32% beside a bar that reads as almost full unless the scale says so.",
+    ),
+    primitives=(
+        "PlotFrame: surface panel, grid lines, baseline.",
+        "Bar: scaleY from the baseline, primary or secondary.",
+        "SeriesLine: a polyline driven by line_draw, with an end dot.",
+        "BigNumber: mono or display numeral driven by count_up, with a text_dim unit.",
+    ),
+    caption="Bottom of the frame, mono, outside the plot. The current word is primary. Do not draw the caption through the chart.",
+    dos=(
+        "Reveal the chart in the same order the sentence makes the claim.",
+        "Label the unit before or as the number counts, not three seconds later.",
+        "Use accent for the one point the narration calls out.",
+    ),
+    donts=(
+        "Do not bounce bars past their final value.",
+        "Do not use 3D pies, gradients on bars, or decorative glow.",
+        "Do not plot a series that the narration does not mention.",
+        "Do not use comic or chalk type for the figures.",
+    ),
+    agent_rules=(
+        "Bars grow from zero. A bar that fades in already at full height skipped the clip.",
+        "The highlighted point is accent. Everything else stays on primary or secondary.",
+        "If you cannot name the unit, do not invent a chart. Use a big number only when the sentence has one.",
+    ),
+)

@@ -1,0 +1,77 @@
+"""Neo-brutalist. Thick borders, hard shadows, terracotta on ink."""
+
+from motionstyle_core import clip, font, make_style, spring
+
+STYLE = make_style(
+    id="brutalist",
+    name="Neo-Brutalist",
+    tagline="Chunky cards, hard shadows, and type that behaves like an object.",
+    best_for=("teaching explainers", "product how-tos", "opinionated software", "classroom-to-camera lessons"),
+    aliases=("neo-brutalist", "neo brutalism", "brutalist", "hard shadow", "terracotta cards"),
+    palette=dict(
+        background="#1A1A2E",
+        background_raised="#23233A",
+        surface="#F7F4F0",
+        ink="#0B0B12",
+        text="#F7F4F0",
+        text_dim="#A0978C",
+        primary="#CC785C",
+        primary_light="#E09880",
+        primary_dark="#A85A40",
+        secondary="#4A5568",
+        accent="#D4845A",
+        danger="#E35D5D",
+        ok="#5CB88A",
+        info="#5B8DEF",
+    ),
+    spots=(("cream_muted", "#E8E2DA"), ("secondary_light", "#718096"), ("secondary_dark", "#2D3748")),
+    display=font("Avenir Next, Segoe UI, Helvetica Neue, Arial, sans-serif", 800, 0.04, "upper", 0.92),
+    body=font("Avenir Next, Segoe UI, Helvetica Neue, Arial, sans-serif", 700, 0.01, "none", 1.3),
+    mono=font("SF Mono, ui-monospace, Menlo, Monaco, Consolas, monospace", 700, 0.02, "none", 1.2),
+    shape=dict(
+        radius_px=24,
+        border_px=5,
+        border_color="#0B0B12",
+        shadow="8px 8px 0px 0px #0B0B12",
+        blur_px=0,
+        notes="The shadow is a flat offset block with no blur. Small elements use 5px 5px. Large cards use 12px 12px. Pills use a 3px border and a fully round radius.",
+    ),
+    motion_character="Physical and springy. Cards pop into their shadow. The shadow grows with the card, it is not a fade. Held cards rock by a fraction of a degree.",
+    springs=(spring("chip", 420, 20, 0.8), spring("panel", 260, 18, 1.0)),
+    clips=(
+        clip("pop_scale", 0.45, "ease-out-back", "scale", ((0, 0.86), (1, 1)), "Use the panel spring for cards and the chip spring for pills. The overshoot is short."),
+        clip("shadow_drop", 0.45, "ease-out", "shadowOffset", ((0, 0), (1, 8)), "Grows the hard shadow from nothing to 8px. Large cards end at 12. Pills end at 5."),
+        clip("idle_rock", 3.4, "ease-in-out", "rotate", ((0, -0.4), (0.5, 0.4), (1, -0.4)), "Loop. A held card is never frozen."),
+    ),
+    stagger_s=0.07,
+    idle="Held cards rock under half a degree. Pills do not rock if a card already is.",
+    chrome=(
+        "Every surface is a card: ink border, cream or colored fill, hard shadow.",
+        "Pick one header per beat. Either a corner chip or a big title card, never both.",
+        "The corner chip is uppercase, primary or accent, top-left, with a hard text shadow.",
+        "Semantic colors (danger, ok, info) are for state, not decoration.",
+    ),
+    primitives=(
+        "HardCard: 5px ink border, 24px radius, hard shadow. Fill is surface, primary, or info.",
+        "Pill: 3px border, fully round, chip spring, smaller shadow.",
+        "TitleCard: display type inside a colored HardCard. Optional text_dim line under it.",
+        "CornerChip: small uppercase label. Do not combine with TitleCard.",
+    ),
+    caption="Karaoke inside a HardCard along the bottom. The full sentence is visible. The current word is primary. The card uses the same border and shadow as everything else.",
+    dos=(
+        "Reuse HardCard, Pill, and one title treatment for every beat.",
+        "Drive entrances with pop_scale and shadow_drop together.",
+        "Keep the background flat navy. Do not put a gradient behind the cards.",
+    ),
+    donts=(
+        "Do not use soft shadows, glow, or backdrop blur.",
+        "Do not mix a corner chip with a centered title card.",
+        "Do not leave a beat on a blank background.",
+        "Do not invent hex values outside the palette.",
+    ),
+    agent_rules=(
+        "If a shadow is blurred, it is no longer this style. Redraw it as a solid offset.",
+        "One title treatment per beat. Corner chip or title card.",
+        "Springs are shared. Do not hand-tune a new easing for a single scene.",
+    ),
+)

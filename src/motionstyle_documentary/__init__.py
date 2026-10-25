@@ -1,0 +1,75 @@
+"""Warm documentary. Slow moves, a serif, and a lower third that does not perform."""
+
+from motionstyle_core import clip, font, make_style
+
+STYLE = make_style(
+    id="documentary",
+    name="Warm Documentary",
+    tagline="A still, a slow push, and a lower third. The story is allowed to take its time.",
+    best_for=("origin stories", "interviews", "narrative explainers", "field notes"),
+    aliases=("documentary", "ken burns", "lower third", "editorial film", "warm narrative"),
+    palette=dict(
+        background="#140E0A",
+        background_raised="#231710",
+        surface="#1C140F",
+        ink="#F6EFE4",
+        text="#F3EBDF",
+        text_dim="#B6A494",
+        primary="#E0A15A",
+        primary_light="#F0C48A",
+        primary_dark="#B7793A",
+        secondary="#8C3A2F",
+        accent="#F3E6D4",
+        danger="#A33B32",
+        ok="#7E9A74",
+        info="#C4A484",
+    ),
+    display=font("Iowan Old Style, Palatino, Georgia, serif", 600, -0.015, "none", 1.05),
+    body=font("Iowan Old Style, Palatino, Georgia, serif", 400, 0.0, "none", 1.45),
+    mono=font("SF Mono, ui-monospace, Menlo, Consolas, monospace", 500, 0.08, "upper", 1.2),
+    shape=dict(
+        radius_px=2,
+        border_px=0,
+        border_color="#E0A15A",
+        shadow="none",
+        blur_px=0,
+        notes="Almost no chrome. A lower third is a flat primary bar or a simple rule, 2px radius at most. Photographs sit full-bleed or in a quiet frame.",
+    ),
+    motion_character="Slow. Pictures drift with a Ken Burns scale. Type fades. The lower third slides a short distance and stays. Nothing bounces, slams, or draws on like a diagram.",
+    clips=(
+        clip("fade_in", 0.6, "ease-in-out", "opacity", ((0, 0), (1, 1)), "Use for titles and for the first moment of a still."),
+        clip("ken_burns", 8.0, "linear", "scale", ((0, 1), (1, 1.06)), "Set the duration to the length of the beat when the beat is shorter or longer. Direction alternates: in, then out."),
+        clip("lower_third", 0.7, "ease-out", "y", ((0, 16), (1, 0)), "The bar also fades with fade_in. It does not travel in from offscreen."),
+    ),
+    stagger_s=0.0,
+    idle="The still is still moving, very slowly, via ken_burns. Type holds.",
+    chrome=(
+        "One still or one field of color per beat. Do not collage.",
+        "Titles are serif, sentence case, often only a few words.",
+        "The lower third carries a name or a place, in small mono or small serif, on a primary bar with ink text.",
+        "Letterboxing is allowed. Busy lower-screen UI is not.",
+    ),
+    primitives=(
+        "Still: a full-bleed image or a warm color field, always under ken_burns.",
+        "Title: serif display, fade_in, placed on the left third, not dead center every time.",
+        "LowerThird: primary bar, short slide, one line.",
+        "Rule: a 1px accent line used in place of a bar when the frame is already quiet.",
+    ),
+    caption="The lower third is the caption. Highlight the current phrase in accent if the narration must be readable. Do not add a bouncing karaoke pill on top of it.",
+    dos=(
+        "Let a still last as long as the sentence.",
+        "Alternate Ken Burns direction between beats so the push does not feel like a zoom bug.",
+        "Use secondary sparingly, as a quiet color in a still's grade, not as UI.",
+    ),
+    donts=(
+        "Do not use springs, slams, or draw-on strokes.",
+        "Do not put charts, isometric blocks, or neon in this style.",
+        "Do not center every title.",
+        "Do not cut the still every two seconds.",
+    ),
+    agent_rules=(
+        "If an element bounces, it has left the style.",
+        "Ken Burns is a few percent of scale over the whole beat, not a punch-in.",
+        "One still, one title treatment. A corner chip plus a lower third plus a title is too much.",
+    ),
+)
